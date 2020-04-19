@@ -1,2 +1,2 @@
-![Pictures](/abstract.PNG);
-![Pictures](/pattern.PNG);
+![text](Pictures/abstract.PNG);
+!text1](Pictures/pattern.PNG);
