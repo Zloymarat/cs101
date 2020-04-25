@@ -1,0 +1,48 @@
+let img; // Вдохновлен - интро кролика Bugs Bunny от Warner Brothers.
+function preload() {
+  img1 = loadImage("lt.png");
+  img2 = loadImage("wb.png");
+  soundFormats('mp3','ogg');
+  ost = loadSound('WB.mp3');
+}
+
+let rotateFactor = 0;
+
+function setup() {
+  ost.setVolume(0.1);
+  ost.play(0);
+  createCanvas(400, 200);
+}
+
+function draw() {
+  background(0, 51, 204);
+  push();
+  frameRate(10);
+  translate(width/2, height/2);
+  rotate(rotateFactor);
+  drawellipse([255, 102, 102, 250],[255, 255, 255],6,3, 3, 200, 445);
+  drawellipse([255, 102, 102, 80],[255, 255, 255],5,2, 3.5, 200, 375);
+  drawellipse([255, 102, 102, 70],[255, 255, 255],4,2.5, 2, 200, 305);
+  drawellipse([255, 102, 102, 40],[255, 255, 255],3,2.2, 2.9, 10, 245);
+  drawellipse([255, 255, 255, 20],[255, 102, 102],2,1, 1, 10, 185);
+  drawellipse([0, 51, 204, 200],[255, 102, 102], 0, 0, 0/2, 5, 185);// синий центр
+  pop();
+  
+  image(img1, -15, -40, 330, 130);
+  image(img2, 80, 30, 240, 150);
+
+  function drawellipse(fillCrl, strokeClr,z, cx, cy, d, d){
+    fill(fillCrl[0], fillCrl[1], fillCrl[2],fillCrl[3]);
+    stroke(strokeClr[0], strokeClr[1], strokeClr[2]);
+    strokeWeight(z)
+    ellipse(cx, cy, d, d);
+    rotateFactor = rotateFactor + 0.1;
+  }
+  //     textSize(20);
+  // fill(255);
+  // text ("Нажмите любую кнопку", 120, 120);
+}
+
+// function draw() {
+
+// }
