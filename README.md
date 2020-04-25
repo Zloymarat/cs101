@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 abstract
@@ -17,3 +18,13 @@ abstract
 pattern
 ![B](Pictures/pattern.PNG)
 >>>>>>> eac3c059e2f40ea9f25d782f3c75ecae16f6ccad
+=======
+abstract
+
+![A](Pictures/abstract.PNG)
+
+
+pattern
+
+![B](Pictures/pattern.PNG)
+>>>>>>> 786f4725c780783a7d04a0571f9d1228b07d0cb8
