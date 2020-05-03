@@ -1,0 +1,86 @@
+let xStride = 0; // Управление WSAD 
+let yStride = 0; // C constrain было сложновато
+
+let xlStride = 0; // Мини игра, с каждым движением скорость увеличивается. Стоп - через пробел.
+let ylStride = 0;
+
+
+let velocity = 0;
+let acceleration = 0.002;
+
+let x = 0;
+let y = 0;
+let xl = 0;
+let yl = 0;
+
+let state = '';
+
+function setup() {
+  createCanvas(600, 500);
+  fill(255, 0, 0);
+  img = loadImage("L.jpg");
+}
+
+function draw() {
+  background(255);
+  image(img, 25, 25, 500, 400);
+  noStroke();
+  fill(255, 0, 0);
+  translate(width/2, height/2);
+  ellipse(-32 + xlStride, 120 + ylStride,  10, 20);
+  fill(128, 191, 255);
+  ellipse(-28 + xStride, 115 + yStride,  7, 7);
+  ellipse(-36 + xStride, 115 + yStride,  7, 7);
+  ellipse(-32 + xStride, 130 + yStride,  3, 15);
+  
+  velocity = velocity + acceleration;
+  
+  if (state == 'up') {
+    yStride -= velocity;
+    ylStride -= velocity;
+  }
+  else if(state == 'down') {
+    yStride += velocity;
+    ylStride += velocity;
+  }
+  else if(state == 'right') {
+    xStride += velocity;
+    xlStride += velocity;
+  }
+  else if(state == 'left') {
+    xStride -= velocity;
+    xlStride -= velocity;
+  }
+  else if(state == 'stop') {
+    xStride = xStride;
+    yStride = yStride;
+    
+  }  
+    else if(state == 'Zero point') {
+    xStride = 0;
+    yStride = 0;
+    xlStride = 0;
+    ylStride = 0;
+  } 
+}
+
+function keyPressed() {
+  if (keyCode === 87) { // W
+    state = 'up';
+  }
+  else if (keyCode === 83) { // S
+     state = 'down';
+  }
+  else if (keyCode === 68) { // D
+    state = 'right';
+  }
+  else if (keyCode === 65) { // A
+    state = 'left';
+  }
+  else if (keyCode === 32) { // ПРОБЕЛ - стоп
+    state = 'stop';
+  }
+   else if (keyCode === 81) { // Q - Возврат на исходную точку
+    state = 'Zero point';
+  }
+ }
