@@ -1,0 +1,417 @@
+let UFO;
+let UFO2;
+let cow;
+let fance;
+let green;
+let pig;
+let farm;
+let bomb;
+let soldier;
+let tank;
+let wood;
+let building;
+let sprite;
+let sprite1;
+let sprite2;
+let sprite3;
+let stone;
+let stones;
+let Hill;
+let collisionCount = 0;
+
+let regFont; 
+
+function preload(){
+  soundFormats('mp3', 'ogg');
+  ost = loadSound('assets/X-Files.mp3');
+  
+  regFont = loadFont('assets/Montserrat-SemiBold.ttf');
+  
+  UFOImg = loadImage('assets/UFO.png');
+  UFO2Img = loadImage('assets/UFO2.png');
+  cowImg = loadImage('assets/cow.png');
+  fanceImg = loadImage('assets/fance.png');
+  bombImg = loadImage('assets/bomb.png');
+  cloudImg = loadImage('assets/cloud.png');
+  greenImg = loadImage('assets/green.png');
+  pigImg = loadImage('assets/pig.png');
+  farmImg = loadImage('assets/farm.png');
+  soldierImg = loadImage('assets/soldier.png');
+  tankImg = loadImage('assets/tank.png');
+  woodImg = loadImage('assets/wood.png');
+  buildingImg = loadImage('assets/building.png');
+  HillImg = loadImage('assets/Hill.png');
+  stoneImg = loadImage('assets/stone.png');
+  stonesImg = loadImage('assets/stones.png');
+}
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  
+  sprite1 = createSprite(0, 0, 80, windowHeight*2);
+  sprite = createSprite(0, 0, 50, windowHeight*2);
+  sprite3 = createSprite(windowWidth, 20, 90, windowHeight*2);
+  sprite2 = createSprite(windowWidth, 0, 50, windowHeight*2);
+  sprite.shapeColor = color(153, 214, 255);
+  sprite1.shapeColor = color(255, 255, 204);
+  sprite2.shapeColor = color(153, 214, 255);
+  sprite3.shapeColor = color(255, 255, 204);
+  sprite1.mass = 10000;
+  sprite1.restitution = 0.02;
+  sprite3.mass = 10000;
+  sprite3.restitution = 0.02;
+  
+  Hill = createSprite(80, windowWidth, 50, 0);// холм
+  Hill.addImage('normal', HillImg);
+  Hill.scale = 0.09;
+  Hill.mass = 10000;
+  Hill.restitution = 0.02;
+  
+  stone = createSprite(65, 20, windowWidth, windowHeight);
+  stone.addImage('normal', stoneImg);
+  stone.scale = 0.09;
+  stone.mass = 10000;
+  stone.restitution = 0.02;
+  
+  stones = createSprite(65, 20, windowWidth, windowHeight);
+  stones.addImage('normal', stonesImg);
+  stones.scale = 0.01;
+  stones.mass = 10000;
+  stones.restitution = 0.02;
+
+  UFO = createSprite(0, 200, 20, 20);
+  UFO.addImage('normal', UFOImg);
+  UFO.scale = 0.09;
+  UFO.setCollider('circle', 0, 0, 25); // границы 
+  UFO.velocity.x = 2; 
+  UFO.velocity.y = 2; 
+  
+  HilllesGroup = new Group();
+  
+  for (let i = 6; i < 100; i = i + 3){
+    Hill = createSprite(i * 15, windowHeight, 30, 80);
+    Hill.addImage(HillImg);
+    Hill.scale = 0.09;
+    Hill.setCollider('circle', 0, 0, 350); // границы
+    Hill.setSpeed(0, random(0, 270));
+    HilllesGroup.add(Hill);
+  }
+    
+  stonelesGroup = new Group();
+  
+  for (let i = 4; i < 100; i = i + 3){
+    stone = createSprite(i * 15, 15, 20, 80);
+    stone.addImage(stoneImg);
+    stone.scale = 0.09;
+    stone.setCollider('circle', 0, 0, 350); // границы
+    stone.setSpeed(0, random(0, 270));
+    stonelesGroup.add(stone);
+  }
+  
+  stoneslesGroup = new Group();
+  
+  for (let i = 5.5; i < 100; i = i + 3){
+    stones = createSprite(i * 15, 10, 20, 80);
+    stones.addImage(stonesImg);
+    stones.scale = 0.05;
+    stones.setCollider('circle', 0, 0, 350); // границы
+    stones.setSpeed(0, random(0, 270));
+    stoneslesGroup.add(stones);
+  }
+
+  fancelesGroup = new Group();
+  
+  for (let i = 0; i < 3; i++){
+    fance = createSprite(random(40, width), random(40, height));
+    fance.addImage(fanceImg);
+    fance.scale = 0.09;
+    fance.setCollider('circle', 0, 0, 250); // границы
+    fance.setSpeed(0, random(0, 270));
+    fancelesGroup.add(fance);
+  }
+  
+  buildinglesGroup = new Group();
+  
+  for (let i = 0; i < 3; i++){
+    building = createSprite(random(40, width), random(40, height));
+    building.addImage(buildingImg);
+    building.scale = 0.09;
+    building.setCollider('circle', 0, 0, 250); // границы
+    building.setSpeed(0, random(0, 270));
+    buildinglesGroup.add(building);
+  }
+  
+  woodlesGroup = new Group();
+  
+  for (let i = 0; i < 4; i++){
+    wood = createSprite(random(40, width), random(40, height));
+    wood.addImage(woodImg);
+    wood.scale = 0.09;
+    wood.setCollider('circle', 0, 0, 250); // границы
+    wood.setSpeed(0, random(0, 270));
+    woodlesGroup.add(wood);
+  }
+  
+  tanklesGroup = new Group();
+  
+  for (let i = 0; i < 4; i++){
+    tank = createSprite(random(40, width), random(40, height));
+    tank.addImage(tankImg);
+    tank.scale = 0.09;
+    tank.setCollider('circle', 0, 0, 250); // границы
+    tank.setSpeed(0.5, random(0, 270));
+    tank.mass = 1;
+    tank.velocity.x = -10; 
+    tank.setSpeed(0.07);
+    tanklesGroup.add(tank);
+  }
+  
+  soldierlesGroup = new Group();
+  
+  for (let i = 0; i < 4; i++){
+    soldier = createSprite(random(40, width), random(40, height));
+    soldier.addImage(soldierImg);
+    soldier.scale = 0.09;
+    soldier.setCollider('circle', 0, 0, 250); // границы
+    soldier.setSpeed(0.5, random(0, 270));
+    soldier.mass = 1;
+    soldier.velocity.y = -10; 
+    soldier.setSpeed(0.09);
+    soldierlesGroup.add(soldier);
+  }
+  
+  farmlesGroup = new Group();
+  
+  for (let i = 0; i < 5; i++){
+    farm = createSprite(random(40, width), random(40, height));
+    farm.addImage(farmImg);
+    farm.scale = 0.09;
+    farm.setCollider('circle', 0, 0, 250); // границы
+    farm.setSpeed(0.5, random(0, 270));
+    farm.mass = 1;
+    farm.setSpeed(0.09);
+    farmlesGroup.add(farm);
+  }
+  
+  piglesGroup = new Group();
+  
+  for (let i = 0; i < 4; i++){
+    pig = createSprite(random(40, width), random(40, height));
+    pig.addImage(pigImg);
+    pig.scale = 0.09;
+    pig.setCollider('circle', 0, 0, 250); // границы
+    pig.setSpeed(0.5, random(0, 270));
+    pig.mass = 1;
+    tank.setSpeed(0.06);
+    piglesGroup.add(pig);
+  }
+  
+  greenlesGroup = new Group();
+  
+  for (let i = 0; i < 2; i++){
+    green = createSprite(random(40, width), random(40, height));
+    green.addImage(greenImg);
+    green.scale = 0.09;
+    green.setCollider('circle', 0, 0, 250); // границы
+    green.setSpeed(0.4, random(0, 270));
+    green.mass = 1;
+    greenlesGroup.add(green);
+  }
+  
+  bomblesGroup = new Group();
+  
+  for (let i = 0; i < 4; i++){
+    bomb = createSprite(random(40, width), random(40, height));
+    bomb.addImage(bombImg);
+    bomb.scale = 0.09;
+    bomb.setCollider('circle', 0, 0, 250); // границы
+    bomb.setSpeed(0.19, random(0, 270));
+    bomb.mass = 1;
+    bomblesGroup.add(bomb);
+  }
+  
+  cowlesGroup = new Group();
+  
+  for (let i = 0; i < 8; i++){
+    cow = createSprite(random(40, width), random(40, height));
+    cow.addImage(cowImg);
+    cow.scale = 0.09;
+    cow.setCollider('circle', 0, 0, 250); // границы
+    cow.setSpeed(0.3, random(0, 270));
+    cow.mass = 1;
+    cowlesGroup.add(cow);
+  }
+  
+  cloudlesGroup = new Group();
+  
+  for (let i = 1; i < 12; i++){
+    cloud = createSprite(random(40, width), random(40, height));
+    cloud.addImage(cloudImg);
+    cloud.scale = 0.09;
+    cloud.setCollider('circle', 0, 0, 250); // границы 
+    cloudlesGroup.add(cloud);
+    cloud.setSpeed(0.03, random(0, 270));
+  }
+
+}
+
+function draw() {
+  if (millis() < 5000) {
+    push();
+    background(155);
+    textSize(35);
+    loadImage(UFO2Img);
+    text("UFO - собери всех моих друзей и набери 100 очков", 50, height/2); 
+    pop();
+  }
+  
+  else {
+    background(113, 215, 90); 
+    drawSprites();
+    UFO.position.x = mouseX;
+    UFO.position.y = mouseY;
+  
+    tanklesGroup.collide(buildinglesGroup);
+    soldierlesGroup.collide(buildinglesGroup);
+    farmlesGroup.collide(buildinglesGroup);
+    piglesGroup.collide(buildinglesGroup);
+    greenlesGroup.collide(buildinglesGroup);
+    bomblesGroup.collide(buildinglesGroup);
+    cowlesGroup.collide(buildinglesGroup);
+    UFO.collide(buildinglesGroup);
+  
+    tanklesGroup.collide(woodlesGroup);
+    soldierlesGroup.collide(woodlesGroup);
+    farmlesGroup.collide(woodlesGroup);
+    piglesGroup.collide(woodlesGroup);
+    greenlesGroup.collide(woodlesGroup);
+    bomblesGroup.collide(woodlesGroup);
+    cowlesGroup.collide(woodlesGroup);
+    UFO.collide(woodlesGroup);
+
+    tanklesGroup.collide(fancelesGroup);
+    soldierlesGroup.collide(fancelesGroup);
+    farmlesGroup.collide(fancelesGroup);
+    piglesGroup.collide(fancelesGroup);
+    greenlesGroup.collide(fancelesGroup);
+    bomblesGroup.collide(fancelesGroup);
+    cowlesGroup.collide(fancelesGroup);
+    UFO.collide(fancelesGroup);
+    
+
+    tanklesGroup.bounce(sprite1);
+    soldierlesGroup.bounce(sprite1);
+    farmlesGroup.bounce(sprite1);
+    piglesGroup.bounce(sprite1);
+    greenlesGroup.bounce(sprite1);
+    bomblesGroup.bounce(sprite1);
+    cowlesGroup.bounce(sprite1);
+    UFO.bounce (sprite1);
+    
+    tanklesGroup.bounce(sprite3);
+    soldierlesGroup.bounce(sprite3);
+    farmlesGroup.bounce(sprite3);
+    piglesGroup.bounce(sprite3);
+    greenlesGroup.bounce(sprite3);
+    bomblesGroup.bounce(sprite3);
+    cowlesGroup.bounce(sprite3);
+    UFO.bounce (sprite3);
+    
+    tanklesGroup.bounce(stonelesGroup);
+    soldierlesGroup.bounce(stonelesGroup);
+    farmlesGroup.collide(stonelesGroup);
+    piglesGroup.collide(stonelesGroup);
+    greenlesGroup.collide(stonelesGroup);
+    bomblesGroup.bounce(stonelesGroup);
+    cowlesGroup.collide(stonelesGroup);
+    UFO.collide(stonelesGroup);
+    
+    tanklesGroup.bounce(stoneslesGroup);
+    soldierlesGroup.bounce(stoneslesGroup);
+    farmlesGroup.collide(stoneslesGroup);
+    piglesGroup.collide(stoneslesGroup);
+    greenlesGroup.collide(stoneslesGroup);
+    bomblesGroup.bounce(stoneslesGroup);
+    cowlesGroup.collide(stoneslesGroup);
+    UFO.collide(stoneslesGroup);
+    
+    tanklesGroup.bounce(HilllesGroup);
+    soldierlesGroup.bounce(HilllesGroup);
+    farmlesGroup.collide(HilllesGroup);
+    piglesGroup.collide(HilllesGroup);
+    greenlesGroup.collide(HilllesGroup);
+    bomblesGroup.bounce(HilllesGroup);
+    cowlesGroup.collide(HilllesGroup);
+    UFO.collide(HilllesGroup);
+    
+    tanklesGroup.bounce(piglesGroup, greenlesGroup, cowlesGroup, farmlesGroup, tanklesGroup, soldierlesGroup, bomblesGroup);
+    soldierlesGroup.bounce(piglesGroup, greenlesGroup, cowlesGroup, farmlesGroup, tanklesGroup, soldierlesGroup, bomblesGroup);
+    bomblesGroup.bounce(piglesGroup, greenlesGroup, cowlesGroup, farmlesGroup, tanklesGroup, soldierlesGroup, bomblesGroup);
+    piglesGroup.bounce(greenlesGroup, cowlesGroup, farmlesGroup, tanklesGroup, soldierlesGroup, bomblesGroup, piglesGroup);
+    greenlesGroup.bounce(piglesGroup, cowlesGroup, farmlesGroup, tanklesGroup, soldierlesGroup, bomblesGroup, greenlesGroup);
+    cowlesGroup.bounce(piglesGroup, greenlesGroup, farmlesGroup, tanklesGroup, soldierlesGroup, bomblesGroup, cowlesGroup);
+    farmlesGroup.bounce(piglesGroup, greenlesGroup, cowlesGroup, tanklesGroup, soldierlesGroup, bomblesGroup, farmlesGroup);
+    
+    
+  if (UFO.overlap(cow)) {
+    cow.shapeColor = color(255)
+  }
+  
+  cloud.setSpeed(0.5, 45);
+  UFO.overlap(cowlesGroup, addPoint);
+  UFO.overlap(piglesGroup, addPoint1);
+  UFO.overlap(greenlesGroup, addPoint2);
+  UFO.overlap(farmlesGroup, addPoint3);
+  UFO.overlap(bomblesGroup, takePoint);
+  UFO.overlap(soldierlesGroup, takePoint1);
+  UFO.overlap(tanklesGroup, takePoint2);
+  
+  text(collisionCount, 60, 60);
+}
+
+function addPoint(cowlesGroup, cow) {
+  if (cow.mass == 1) {
+    collisionCount = collisionCount + 5;
+    cow.mass = 0.5;
+    cow.remove();
+  }
+}
+function takePoint(bomblesGroup, bomb) {
+  if (bomb.mass == 1) {
+    collisionCount = collisionCount - 10;
+    bomb.mass = 0.5;
+  }
+}
+function addPoint2(greenlesGroup, green) {
+  if (green.mass == 1) {
+    collisionCount = collisionCount + 20;
+    green.mass = 0.5;
+    green.remove();
+  }
+}
+function addPoint1(piglesGroup, pig) {
+  if (pig.mass == 1) {
+    collisionCount = collisionCount + 5;
+    pig.mass = 0.5;
+    pig.remove();
+  }
+}
+function addPoint3(farmlesGroup, farm) {
+  if (farm.mass == 1) {
+    collisionCount = collisionCount + 15;
+    farm.mass = 0.5;
+    farm.remove();
+  }
+}
+function takePoint1(soldierlesGroup, soldier) {
+  if (soldier.mass == 1) {
+    collisionCount = collisionCount - 15;
+    soldier.mass = 0.5;
+  }
+}
+function takePoint2(tanklesGroup, tank) {
+  if (tank.mass == 1) {
+    collisionCount = collisionCount - 20;
+    tank.mass = 0.5;
+  }
+}
+}
