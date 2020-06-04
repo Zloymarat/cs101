@@ -431,14 +431,7 @@ function takePoint2(tanklesGroup, tank) {
 }
 
 
-  if (collisionCount === 25) { 
+  if (collisionCount === 50) { 
     state = 'over'; 
   }
-}
-
-function GameOver() {
-  GameState = 'Over';
-    background(255);
-    text("Игра окончена", 50, height/2); 
-    text('press R to restart', 60, 80, 150);
 }
