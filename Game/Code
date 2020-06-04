@@ -46,15 +46,13 @@ function preload(){
 }
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  
+  state = 'start';
   sprite1 = createSprite(0, 0, 80, windowHeight*2);
   sprite = createSprite(0, 0, 50, windowHeight*2);
-  sprite3 = createSprite(windowWidth, 20, 90, windowHeight*2);
-  sprite2 = createSprite(windowWidth, 0, 50, windowHeight*2);
+  sprite3 = createSprite(windowWidth, 10, 10, windowHeight*2);
   sprite.shapeColor = color(153, 214, 255);
   sprite1.shapeColor = color(255, 255, 204);
-  sprite2.shapeColor = color(153, 214, 255);
-  sprite3.shapeColor = color(255, 255, 204);
+  sprite3.shapeColor = color(102, 51, 0);
   sprite1.mass = 10000;
   sprite1.restitution = 0.02;
   sprite3.mass = 10000;
@@ -254,18 +252,35 @@ function setup() {
 
 }
 
-function draw() {
-  if (millis() < 5000) {
-    push();
+function draw() {    
+  if (state === 'start') {
+    start();
+}
+  else if(state === 'game') {
+    game();
+  }
+  else if(state === 'over') {
     background(155);
     textSize(35);
-    loadImage(UFO2Img);
-    text("UFO - собери всех моих друзей и набери 100 очков", 50, height/2); 
-    pop();
+    text("Игра окончена. Нажми R для перезапуска", 50, height/2); 
   }
   
-  else {
-    background(113, 215, 90); 
+  if (state === 'start' && keyIsPressed && key === 's') {
+    state = 'game';
+  }
+  if (state === 'over' && keyIsPressed && key === 'r') {
+    document.location.reload(true);
+  }
+  
+function start() {
+    background(155);
+    textSize(35);
+    text("UFO - набери 50 очков. Нажми S для продолжения", 50, height/2);
+}
+  
+function game() {
+
+    background(0, 204, 0); 
     drawSprites();
     UFO.position.x = mouseX;
     UFO.position.y = mouseY;
@@ -414,4 +429,16 @@ function takePoint2(tanklesGroup, tank) {
     tank.mass = 0.5;
   }
 }
+
+
+  if (collisionCount === 25) { 
+    state = 'over'; 
+  }
+}
+
+function GameOver() {
+  GameState = 'Over';
+    background(255);
+    text("Игра окончена", 50, height/2); 
+    text('press R to restart', 60, 80, 150);
 }
